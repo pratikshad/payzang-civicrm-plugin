@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <extension key="payment.payzang.process" type="module">
-  <downloadUrl>https://github.com/mahesh-mahajan/payzang-civicrm-plugin/archive/4.4.zip</downloadUrl>
+  <downloadUrl>https://github.com/webaccess/payzang-civicrm-plugin/archive/4.4.zip</downloadUrl>
   <file>process</file>
   <name>Payzayng Payment Extension</name>
   <description>Extension for civi customizations for Payzang</description>
   <urls>
-    <url desc="Main Extension Page">https://github.com/mahesh-mahajan/payzang-civicrm-plugin/tree/4.4</url>
-    <url desc="Documentation">https://github.com/mahesh-mahajan/payzang-civicrm-plugin/blob/4.4/PayZang Payment Processor Installation Instructions.pdf</url>
+    <url desc="Main Extension Page">https://github.com/webaccess/payzang-civicrm-plugin/tree/4.4</url>
+    <url desc="Documentation">https://github.com/webaccess/payzang-civicrm-plugin/blob/4.4/PayZang Payment Processor Installation Instructions.pdf</url>
     <url desc="Licensing">http://civicrm.org/licensing</url>
   </urls>
   <license>AGPL</license>

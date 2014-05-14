@@ -320,10 +320,14 @@ function process_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
 function process_civicrm_pre( $op, $objectName, $id, &$params ) {
   $smarty  =&  CRM_Core_Smarty::singleton( );
   $variables = $smarty->get_template_vars();
-  $is_monetory = $variables['is_monetary'];
-  $paymentInstrumentId = $variables['paymentMethod'];
+  if(isset($variables['is_monetary'])){
+    $is_monetory = $variables['is_monetary'];
+    }
+   if(isset($variables['paymentMethod'])){
+    $paymentInstrumentId = $variables['paymentMethod'];
+    }
   if($op == 'create' && (($objectName == "Contribution" && !$params['is_pay_later']) || $objectName == "ContributionRecur")) {
-    if ($is_monetory && $paymentInstrumentId) {
+    if (isset($is_monetory) && $paymentInstrumentId) {
       $params['payment_instrument_id'] = $paymentInstrumentId;
     }
   }
