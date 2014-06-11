@@ -24,6 +24,30 @@
  +--------------------------------------------------------------------+
 *}
 
+{literal}
+ <style>
+        .is_pledge-section,.is_recur-section {
+           display:none;
+        }
+    </style>
+    <script>
+    cj(document).ready(function() {
+        cj('.single').attr('checked', true);
+        cj('input[name="payment_type"]').on('change', function(){
+        if (cj(this).val()=='2') {
+            cj('.is_pledge-section').css('display','block');
+            cj('.is_recur-section').css('display','block');
+        }
+        else {
+            cj('.is_pledge-section').css('display','none');
+            cj('.is_recur-section').css('display','none');
+        }
+});
+ });
+    </script>
+{/literal}
+
+
 {* Callback snippet: Load payment processor *}
 {if $snippet}
 {include file="CRM/Core/BillingBlock.tpl" context="front-end"}
@@ -99,6 +123,15 @@
   <div id="intro_text" class="crm-section intro_text-section">
     {$intro_text}
   </div>
+  <div id="choose-paymentmethod">
+     {if empty($useForMember)}
+        <input type="radio" name="payment_type" value="1" id="payment_type" class="single"><label>Single Payment</label>
+      {/if}
+      {if $pledgeBlock || $form.is_recur}
+        <input type="radio" name="payment_type" value="2" id="payment_type" class="multiple"><label>Multiple Payment</label>
+      {/if}
+  </div>
+  
   {include file="CRM/common/cidzero.tpl"}
   {if $islifetime or $ispricelifetime }
   <div id="help">{ts}You have a current Lifetime Membership which does not need to be renewed.{/ts}</div>

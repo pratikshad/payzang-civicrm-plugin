@@ -8,6 +8,11 @@ require_once 'process.civix.php';
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
 function process_civicrm_config(&$config) {
+  global $base_url;
+  $framework = $config->userFramework;
+  $smarty  =&  CRM_Core_Smarty::singleton( );
+  $smarty->assign('BaseUrl', $base_url);
+  $smarty->assign('FrameWork', $framework);
   _process_civix_civicrm_config($config);
 }
 
@@ -112,7 +117,14 @@ function process_civicrm_buildForm($formName, &$form)
   if ($formName == 'CRM_Contribute_Form_Contribution_Main' || $formName == 'CRM_Event_Form_Registration_Register' || $formName == 'CRM_Contribute_Form_Contribution' || $formName == 'CRM_Event_Form_Participant' || $formName == 'CRM_Member_Form_Membership' || $formName == 'CRM_Member_Form_MembershipRenewal')// && empty($_GET['qfKey']))
     {
       require_once 'CRM/Contribute/PseudoConstant.php';
-
+      if(isset($form->_elementIndex['credit_card_exp_date'])){
+        $expireYear = $form->getElement('credit_card_exp_date');
+        $expireYear->_options['maxYear'] = (int)$expireYear->_options['maxYear']+4;
+        foreach($expireYear->_locale['months_short'] as $key => $val ) {
+          $expireYear->_locale['months_short'][$key] = $key.'-'.$val;
+        }
+        $form->set('credit_card_exp_date', $expireYear);
+      }
       $paymentMethods = CRM_Contribute_PseudoConstant::paymentInstrument();
       foreach ( $paymentMethods as $methodId => $methodName ) {
         if ( $methodName != "Credit Card" && $methodName != "ACH" ) {
@@ -125,9 +137,10 @@ function process_civicrm_buildForm($formName, &$form)
                 $paymentMethods, FALSE,
                 array( 'onChange' => "return showHidePaymentDetails(this);")
       );
-      $element =& $form->add( 'text', 'routing_number', ts('Routing Number'), array('size' => 15, 'maxlength' => 10, 'autocomplete' => 'off'));
-      $element =& $form->add( 'text', 'account_number', ts('Account Number'), array('size' => 15, 'autocomplete' => 'off'));
-      $element =& $form->add( 'text', 'check_number', ts('Check Number'), array('size' => 15, 'autocomplete' => 'off'));
+      $element =& $form->add( 'text', 'routing_number', ts('Routing Number'), array('size' => 15, 'maxlength' => 10, 'autocomplete' => 'off', 'placeholder' => 'Routing#'));
+      $element =& $form->add( 'text', 're_account_number', ts('Re Account Number'), array('size' => 15, 'autocomplete' => 'off', 'placeholder' => 'Re-Enter Account'));
+      $element =& $form->add( 'text', 'account_number', ts('Account Number'), array('size' => 15, 'autocomplete' => 'off', 'placeholder' => 'Account#'));
+      $element =& $form->add( 'text', 'check_number', ts('Check Number'), array('size' => 15, 'autocomplete' => 'off', 'placeholder' => 'Check#'));
       $element =& $form->add( 'select', 'account_type',
                 ts( 'Account Type' ),
                 array('Checking' => ts('Checking'),
@@ -166,17 +179,19 @@ function process_civicrm_buildForm($formName, &$form)
       if ( CRM_Utils_Array::value( 'payment_method', $params ) ) {
         $form->assign( 'payment_method', $paymentMethods[$params['payment_method']]);
       }
-      if ($paymentMethods[$params['payment_method']] == 'ACH') {
-        if ( CRM_Utils_Array::value( 'routing_number', $params ) ) {
-          $form->assign( 'routing_number', $params['routing_number']);
+      if(isset($params['payment_method'])) {
+          if ($paymentMethods[$params['payment_method']] == 'ACH') {
+            if ( CRM_Utils_Array::value( 'routing_number', $params ) ) {
+              $form->assign( 'routing_number', $params['routing_number']);
+            }
+            if ( CRM_Utils_Array::value( 'account_number', $params ) ) {
+              $form->assign( 'account_number', CRM_Utils_System::mungeCreditCard( $params['account_number'] ) );
+            }
+            if ( CRM_Utils_Array::value( 'account_type', $params ) ) {
+              $form->assign( 'account_type', $params['account_type']);
+            }
+          }
         }
-        if ( CRM_Utils_Array::value( 'account_number', $params ) ) {
-          $form->assign( 'account_number', CRM_Utils_System::mungeCreditCard( $params['account_number'] ) );
-        }
-        if ( CRM_Utils_Array::value( 'account_type', $params ) ) {
-          $form->assign( 'account_type', $params['account_type']);
-        }
-      }
     }
   else if ( $formName == 'CRM_Contribute_Form_ContributionPage_Amount')
     {
@@ -282,6 +297,7 @@ function process_civicrm_validate( $formName, &$fields, &$files, &$form )
             unset($form->_errors['cvv2']);
             unset($form->_errors['credit_card_exp_date']);
             unset($form->_errors['credit_card_type']);
+            unset($form->_errors['cardholder_name']);
             if ( !$fields['routing_number'] )
             {
                 // additional validation? modulus 9?
@@ -298,6 +314,14 @@ function process_civicrm_validate( $formName, &$fields, &$files, &$form )
             {
                 $form->_errors['account_number'] = "Account number field is required";
             }
+            if ( !$fields['re_account_number'] )
+            {
+                $form->_errors['re_account_number'] = "Re-Enter Account number field is required";
+            }
+            if ( $fields['re_account_number'] != $fields['account_number'] )
+            {
+                $form->_errors['re_account_number'] = "Re-Enter Account number does not match with account number";
+            }
         }
     }
 }
@@ -306,7 +330,9 @@ function process_civicrm_validate( $formName, &$fields, &$files, &$form )
 //This value will be fetched and set as smarty variable in build form
 function process_civicrm_postProcess( $formName, &$form ) {
   if ($formName == 'CRM_Contribute_Form_Contribution_Main' || $formName == 'CRM_Contribute_Form_Contribution') {
+      if(isset($form->_submitValues['payment_method'])){
     $form->set('paymentMethod', $form->_submitValues['payment_method']);
+    }
   }
 }
 

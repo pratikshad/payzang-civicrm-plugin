@@ -23,7 +23,6 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 *}
-{debug}
 <div class="crm-block crm-content-block crm-contribution-view-form-block">
 <h3>{ts}View Contribution{/ts}</h3>
 
