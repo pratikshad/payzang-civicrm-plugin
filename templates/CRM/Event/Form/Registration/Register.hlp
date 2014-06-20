@@ -1,0 +1,6 @@
+{htxt id="id-cvv2-title"}
+  {ts}cvv2{/ts}
+{/htxt}
+{htxt id="id-cvv2"}
+  {ts}This is usually the last 3-4 digits in the signature area on the back of the card.{/ts}
+{/htxt}

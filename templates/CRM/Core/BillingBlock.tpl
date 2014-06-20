@@ -23,6 +23,7 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 *}
+
 {crmRegion name="billing-block"}
 {* Add 'required' marker to billing fields in this template for front-end / online contribution and event registration forms only. *}
 {if $context EQ 'front-end'}
@@ -85,56 +86,75 @@
                     {else}
                         {if $isPZ eq 1}
                             <div class="crm-section {$form.payment_method.name}-section" id="{$form.payment_method.name}-section">
-                                <div class="label">{$form.payment_method.label}</div>
-                                <div class="content">{$form.payment_method.html}</div>
+                                <div class="content">
+                                <ul id="payment_method_li" name="payment_method_li">
+                                    <li class="current" value="Credit Card" data-value="Credit Card">Credit Card</li>
+                                    <li value="ACH" data-value="ACH">Electronic Check/ACH</li>
+                                </ul>
+                                {$form.payment_method.html}</div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="crm-section {$form.routing_number.name}-section" id="{$form.routing_number.name}-section">
-                                <div class="label">{$form.routing_number.label}<span class = 'crm-marker'>*</span></div>
-                                <div class="content">{$form.routing_number.html}</div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="crm-section {$form.account_number.name}-section" id="{$form.account_number.name}-section">
-                                <div class="label">{$form.account_number.label}<span class = 'crm-marker'>*</span></div>
-                                <div class="content">{$form.account_number.html}</div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="crm-section {$form.check_number.name}-section" id="{$form.check_number.name}-section">
-                                <div class="label">{$form.check_number.label}<span class = 'crm-marker'></span></div>
-                                <div class="content">{$form.check_number.html}</div>
+			    <div id="billing-instructions">Please fill the green fields below</div>
+			    <div data-tab="ACH" class="tab-content">
+
+			    <div id="ACH-fields" style="background-image:url({$BaseUrl}/images/eCheckBkg.jpg)">
+                                <div class="crm-section {$form.routing_number.name}-section" id="{$form.routing_number.name}-section">
+                                    <div class="content">{$form.routing_number.html}</div>
+                                    <div class="clear"></div>
+                            	</div>
+                            	<div class="crm-section {$form.account_number.name}-section" id="{$form.account_number.name}-section">
+                                    <div class="content">{$form.account_number.html}</div>
+                                    <div class="clear"></div>
+                            	</div>
+                            	<div class="crm-section {$form.check_number.name}-section" id="{$form.check_number.name}-section">
+                                    <div class="content">{$form.check_number.html}</div>
+                                    <div class="clear"></div>
+                                </div>
+			    </div>
+			    <div class="account_section">
+			    <div class="crm-section {$form.re_account_number.name}-section" id="{$form.re_account_number.name}-section">
+                                <div class="content">{$form.re_account_number.html}</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="crm-section {$form.account_type.name}-section" id="{$form.account_type.name}-section">
-                                <div class="label">{$form.account_type.label}</div>
                                 <div class="content">{$form.account_type.html}</div>
                                 <div class="clear"></div>
+			    </div>
                             </div>
+			</div>
                         {/if}
-                    <div class="crm-section {$form.credit_card_type.name}-section">
-                        <div class="label">{$form.credit_card_type.label} {$reqMark}</div>
-                        <div class="content">{$form.credit_card_type.html}<div class="crm-credit_card_type-icons"></div></div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="crm-section {$form.credit_card_number.name}-section">
-                        <div class="label">{$form.credit_card_number.label} {$reqMark}</div>
-                        <div class="content">{$form.credit_card_number.html}
-                            <div class="description">{ts}Enter numbers only, no spaces or dashes.{/ts}</div>
+		     <div data-tab="Credit Card" class="tab-content current">       
+		    <div id="CREDIT-card-Fields" style="background-image:url({$BaseUrl}/images/genericCardBkg.jpg)">
+		    	<div class="crm-section {$form.credit_card_type.name}-section">
+                            <div class="label">{$form.credit_card_type.label} {$reqMark}</div>
+                            <div class="content">
+                                {$form.credit_card_type.html}
+                                <div class="crm-credit_card_type-icons"></div>
+                            </div>
+                            <div class="clear"></div>
                         </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="crm-section {$form.cvv2.name}-section">
-                        <div class="label">{$form.cvv2.label}</div>
-                        <div class="content">
-                            {$form.cvv2.html}
-			    <span class="cvv2-icon" title="{ts}Usually the last 3-4 digits in the signature area on the back of the card.{/ts}"> </span>
+                        <div class="crm-section {$form.credit_card_number.name}-section">
+                            <div class="content">{$form.credit_card_number.html}
+                            </div>
+                            <div class="clear"></div>
                         </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="crm-section {$form.credit_card_exp_date.name}-section">
-                        <div class="label">{$form.credit_card_exp_date.label} {$reqMark}</div>
-                        <div class="content">{$form.credit_card_exp_date.html}</div>
-                        <div class="clear"></div>
-                    </div>
+			<div class="crm-section {$form.cardholder_name.name}-section">
+                            <div class="content">{$form.cardholder_name.html}</div>
+                            <div class="clear"></div>
+                        </div>
+                    	<div class="crm-section {$form.credit_card_exp_date.name}-section">
+			    <div class="label">Expires: </div>
+                            <div class="content">{$form.credit_card_exp_date.html}</div>
+                            <div class="clear"></div>
+                        </div>
+			<div class="crm-section {$form.cvv2.name}-section">
+                            <div class="content">
+                                {$form.cvv2.html}<img id='info-icon' src='{$BaseUrl}/images/info.png'><div id ='cvv-help'><img  src='{$BaseUrl}/images/cvv-help.png' alt='cvv-help' /></div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+		    </div>
+		</div>
                 {/if}
             </div>
         </fieldset>
@@ -208,7 +228,7 @@
         {if $profileAddressFields}
         <script type="text/javascript">
                 {literal}
-             cj( function( ) {
+             cj( function( ) {	     
   // build list of ids to track changes on
   var address_fields = {/literal}{$profileAddressFields|@json_encode}{literal};
   var input_ids = {};
@@ -332,49 +352,63 @@
 
         {literal}
         <script type="text/javascript">
+	    
+	    cj('.credit_card_type-section').hide();//to hide the card types section(WA)
+
             function showHidePaymentDetails(element)
             {
                 value = element.options[element.selectedIndex].text;
-
                 //if(value=='Check' )
                 if(value=='ACH')
                 {
-                    cj('.credit_card_type-section').hide();
+		    cj('#CREDIT-card-Fields').hide();
+		    cj('.cardholder_name-section').hide();
                     cj('.credit_card_number-section').hide();
                     cj('.cvv2-section').hide();
                     cj('.credit_card_exp_date-section').hide();
 
+		    cj('#ACH-fields').show();
                     cj('.routing_number-section').show();
                     cj('.account_number-section').show();
+		    cj('.re_account_number-section').show();
                     cj('.check_number-section').show();
                     cj('.account_type-section').show();
 
                 }
                 else if(value=='Credit Card')
                 {
-                    cj('.credit_card_type-section').show();
+		    cj('#CREDIT-card-Fields').show();
+		    cj('.cardholder_name-section').show();
                     cj('.credit_card_number-section').show();
                     cj('.cvv2-section').show();
                     cj('.credit_card_exp_date-section').show();
 
+		    cj('#ACH-fields').hide();
                     cj('.routing_number-section').hide();
                     cj('.account_number-section').hide();
+		    cj('.re_account_number-section').hide();
                     cj('.check_number-section').hide();
                     cj('.account_type-section').hide();
                 }
                 else
                 {
-                    cj('.credit_card_type-section').hide();
+		    cj('#priceset-div').show();
+		    cj('#priceset').show();
+		    cj('#billing-instructions').hide();
+		    cj('#CREDIT-card-Fields').hide();
+		    cj('.cardholder_name-section').hide();
                     cj('.credit_card_number-section').hide();
                     cj('.cvv2-section').hide();
                     cj('.credit_card_exp_date-section').hide();
+		    cj('#ACH-fields').hide();
+		    cj('.re_account_number-section').hide();
                     cj('.routing_number-section').hide();
                     cj('.account_number-section').hide();
                     cj('.check_number-section').hide();
                     cj('.account_type-section').hide();
                 }
             }
-            showHidePaymentDetails(document.getElementById('payment_method'));
+            //showHidePaymentDetails(document.getElementById('payment_method'));
 
             function copyAddress(){
                 var homeArray = new Array( 'first_name', 'last_name', 'street_address-3', 'city-3', 'postal_code-3', 'country-3', 'state_province-3' );
@@ -389,3 +423,459 @@
         {/literal}
     {/if}
 {/crmRegion}
+
+{literal}
+<script>
+    //code to place amount fields below payment istrument section and above billing informations (WA)
+    cj(document).ready(function(){
+	cj('.payment_processor-section input').map(function(index){
+	  var label = cj("label[for='"+this.id+"']");
+	  if(label.text().toLowerCase().indexOf("payzang") >= 0) {
+	    label.html('PayZang <br/>(Credit Card/ Electronic Check/ ACH) ');
+	  }
+	  else {
+	    cj(this, cj("label[for='"+this.id+"']") ).next().andSelf().wrapAll('<div class="input_label">');
+	  }
+	});
+        //remove '-month-' option from month and '-year-' option from select year in credit_card_exp_date
+	cj('#credit_card_exp_date_M option[value=""]').remove();
+	cj('#credit_card_exp_date_Y option[value=""]').remove();
+	cj('#pricelabel label').html('Total:');
+
+	cj('.is_pledge-section').insertAfter('fieldset.credit_card_info-group');
+	cj('.is_recur-section').insertAfter('fieldset.credit_card_info-group');
+	cj('#priceset-div').insertAfter('fieldset.credit_card_info-group');
+	cj('fieldset#priceset legend').css('display', 'none');
+	var selectedIndex=cj( "#payment_method option:selected" ).text();
+	cj('ul#payment_method_li  li').removeClass('current');
+	cj('li[data-value="'+selectedIndex+'"]').addClass('current');
+	cj('.tab-content').removeClass('current');
+	cj('div.tab-content[data-tab="'+selectedIndex +'"]').addClass('current');
+	cj("#payment_method").change(function(){
+	   showHidePaymentDetails(this);
+	});
+	cj('ul#payment_method_li li').click(function(){
+	    var tab_id = cj(this).attr('data-value');
+	    var tab_text = cj(this).text();
+	    cj('ul#payment_method_li  li').removeClass('current');
+	    cj('.tab-content').removeClass('current');
+	    cj(this).addClass('current');
+	    cj('div.tab-content[data-tab="'+tab_id+'"]').addClass('current');
+	    cj( "#payment_method option:contains('"+tab_id+"')").attr('selected', true);
+	    cj("#payment_method").trigger('change');
+	});
+	
+});
+</script>
+{/literal}
+
+{if $FrameWork =='Joomla' }
+    {literal}
+    <style>
+#routing_number-section,#account_number-section,#check_number-section {
+    top:169px;
+}
+#routing_number {
+    width: 79px !important;
+}
+#account_number{
+    width: 119px !important;
+}
+#check_number{
+    width: 52px !important;
+}
+#cvv2 {
+    width: 35px !important;
+}
+
+   </style>
+   {/literal}     
+{/if}
+
+{if $FrameWork =='WordPress' }
+{literal}
+<style>
+#cvv2{
+    width:52px  !important;
+}
+.cvv2-section{
+    width:24%;
+}
+#routing_number-section,#account_number-section,#check_number-section {
+    top:172px;
+}
+#routing_number {
+    width: 96px !important;
+}
+#account_number{
+    width: 135px !important;
+}
+#check_number{
+    width: 64px !important;
+}
+
+#crm-container.crm-public .label {
+        font-size: 0.80em !important;
+}
+
+</style>
+{/literal}
+{/if}
+{if $FrameWork =='Drupal' }
+{literal}
+<style>
+#routing_number-section,#account_number-section,#check_number-section {
+    top:159px;
+}
+#routing_number {
+    width: 79px !important;
+}
+#account_number{
+    width: 119px !important;
+}
+#check_number{
+    width: 52px !important;
+}
+#cvv2 {
+    width: 35px !important;
+}
+</style>
+{/literal}
+{/if}
+{literal}
+<style>
+.input_label {
+    float: right;
+    margin-top: -2.5%;
+    //width: 50%;
+}
+
+.Payment_Amount-section div.label label {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+.Payment_Amount-section div.label, #pricesetTotal .label {
+    text-align: right !important;
+}
+
+#pricelabel label {
+    font-size: 17px;
+    font-weight: bold;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+.credit_card_number-section div span.crm-error, 
+.cvv2-section div span.crm-error, 
+.credit_card_exp_date-section div span.crm-error, 
+.cardholder_name-section div span.crm-error,
+.routing_number-section div span.crm-error,
+.account_number-section div span.crm-error, 
+.re_account_number-section div span.crm-error{
+    display:none !important;
+}
+
+#billing-instructions {
+    background-color:#C1FFC1;
+    border-color: #99CC66;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+#ACH-fields {
+    background-repeat: no-repeat;
+    height: 216px;
+    margin: 10px auto;
+    position: relative;
+    width: 490px;
+}
+#routing_number,#account_number,#check_number,#re_account_number{
+    background-color: #C1FFC1;
+    border: 1px solid #3A741F;
+    font-size: 13px !important;
+    height: 23px !important;
+    padding: 0 6px 0 7px !important;
+}
+#routing_number-section,#account_number-section,#check_number-section {
+    position: absolute;
+    margin: 0;
+    line-height: 23px;
+}
+#routing_number-section {
+    left: 39px;
+}
+#account_number-section {
+    left: 150px;
+}
+#check_number-section {
+    left: 301px;
+}
+#routing_number-section .content ,#account_number-section .content, #check_number-section .content{
+    margin-left:0px !important; 
+}
+.account_section{
+    height: 50px;
+    width: 490px;
+    margin: 10px auto;
+    position: relative;
+}
+#re_account_number-section {
+    margin-left: 117px;
+}
+#re_account_number-section,#account_type-section {
+    float: left;
+}
+#re_account_number {
+    font-size: 13px;
+    height: 23px;
+    margin: 7px 6px 0 8px;
+    padding: 0 7px;
+    width: 119px;
+}
+#account_type{
+    font-size: 12px;
+    height: 25px;
+    left: 10px;
+    padding: 3px;
+    position: relative;
+    top: 7px;
+    width: 122px;
+    background-color: #C1FFC1;
+    border: 1px solid #3A741F;
+    font-size: 13px !important;
+    height: 25px !important;
+    padding: 0 0px 0 7px !important;
+}
+#CREDIT-card-Fields {
+    background-repeat: no-repeat;
+    height: 216px;
+    margin: 10px auto 0;
+    position: relative;
+    width: 352px;
+}
+#credit_card_number,#cvv2,#cardholder_name,#credit_card_exp_date_M,#credit_card_exp_date_Y {
+    background-color: #D4ECC8;
+    border: 1px solid #3A741F;
+    float: left;
+}
+#credit_card_number,#cvv2,#cardholder_name {
+    height: 23px !important;
+    font-size: 13px !important;
+    padding: 0 10px !important;
+}
+#credit_card_number,#cardholder_name  {
+    width: 173px !important;
+}
+
+.credit_card_number-section {
+    left: 13px;
+    line-height: 23px;
+    margin: 0 0 0 14px;
+    position: absolute;
+    top: 56px;
+}
+.cardholder_name-section {
+    left: 13px;
+    line-height: 23px;
+    margin: 0 0 0 14px;
+    position: absolute;
+    top: 91px;
+}
+.cvv2-section {
+    left: 242px;
+    line-height: 23px;
+    margin: 0 0 0 14px;
+    position: absolute;
+    top: 56px;
+}
+.credit_card_exp_date-section {
+    height: 25px;
+    left: 27px;
+    position: absolute;
+    top: 151px;
+    width: 290px;
+}
+.credit_card_exp_date-section .label {
+    color: #FFFFFF;
+    float: left;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    margin: 2px 0 0;
+    padding-top: 0 !important;
+    text-align: left;
+    width : 18% !important;
+}
+#credit_card_exp_date_M {
+    margin: 0 0 0 5px;
+    width: 90px important;
+    padding:0px !important;
+    height:23px !important;
+}
+#credit_card_exp_date_Y {
+    margin: 0 0 0 5px;
+    width: 58px !important;
+    padding:0px !important;
+    height:23px !important;
+}
+.credit_card_number-section .content,.cardholder_name-section .content,.credit_card_exp_date-section .content,.cvv2-section .content{
+    margin-left:0px !important;
+}
+.credit_card_exp_date-section .content{
+margin-top:0px !important;
+}
+
+
+
+#payment_method {
+    display:none;
+}
+ul#payment_method_li{
+
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+ul#payment_method_li li{
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #E4E4E4;
+    border-color: #CCCCCC;
+    border-image: none;
+    border-radius: 2px 2px 0 0;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    color: #222222;
+    cursor: pointer;
+    display: inline-block;
+    list-style: none outside none;
+    padding: 10px 15px;
+}
+ul#payment_method_li li.current{
+    border-radius: 5px 5px 0 0;
+     background:#FFFFFF;
+    color: #222;
+}
+.tab-content{
+    display: none;
+    background: #ededed;
+    padding: 15px;
+    border: 1px solid #CCCCCC;
+}
+.tab-content.current{
+    display: inherit;
+}
+
+#cvv-help {
+    display:none;
+}
+
+#info-icon:hover + #cvv-help{
+    display:block;
+    position:absolute;
+    z-index:100;
+}
+
+.Payment_Amount-section:after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: 97%;
+    margin: 10px;
+    background: #000000;
+}
+
+div#priceset {
+    border-left: 1px solid #000000;
+    float: right;
+    height: 100px;
+    margin: 10px 0 !important;
+    padding-top: 20px;
+    padding-left: 1.5%;
+    width: 40%;
+}
+div#priceset .label {
+    padding-right: 5%;
+    width: 46%;
+}
+div#priceset .Payment_Amount-content {
+    margin-top: 0PX;
+}
+div#priceset .Payment_Amount-content input {
+    background-color: #D4ECC8;
+}
+
+#pricesetTotal #pricelabel {
+    padding-right: 14%;
+    width: 38%;
+}
+#pricesetTotal #pricevalue {
+	font-size: 15px;
+    padding-top: 4px;
+}
+
+.billing_name_address-group {
+	clear:both;
+}
+#choose-paymentmethod {
+	padding: 3% 0;
+}
+
+#payment_information .is_recur-section .label {
+	display: none;
+}
+
+#payment_information .is_recur-section .content {
+	margin-left: 0;
+}
+
+#payment_information .is_recur-section .content label {
+	display : inline;
+	padding: 0 24% 1% 1%;
+}
+.crm-section.payment_method-section {
+    background-color: #F4F4F4;
+    border: 1px solid #E6E6E6;
+    border-radius: 3px;
+}
+#payment_method-section .content {
+    margin-left: 1% !important;
+    margin-top: 1% !important;
+}
+#installments + label {
+    padding-right : 0 !important;
+}
+
+#post-4 .entry-content {
+        max-width: 720px !important;
+}
+
+#crm-container.crm-public .label {
+        text-align: left;
+}
+
+@-moz-document url-prefix() { 
+  #re_account_number-section input {
+     margin: 7px 6px 0 2px;
+  }
+  
+  #account_type-section .content {
+        margin-left: 2% !important;
+  }
+}
+.crm-container fieldset legend {
+ text-indent: -4px !important;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #account_type-section .content {
+        margin-left: 25% !important;
+     }
+}
+
+</style>
+{/literal}
