@@ -440,17 +440,11 @@
         //remove '-month-' option from month and '-year-' option from select year in credit_card_exp_date
 	cj('#credit_card_exp_date_M option[value=""]').remove();
 	cj('#credit_card_exp_date_Y option[value=""]').remove();
-	var date = new Date();
-	var month = date.getMonth();
-	cj('#credit_card_exp_date_M option:eq('+month+')').prop('selected', true);
 	cj('#pricelabel label').html('Total:');
 
 	cj('.is_pledge-section').insertAfter('fieldset.credit_card_info-group');
 	cj('.is_recur-section').insertAfter('fieldset.credit_card_info-group');
 	cj('#priceset-div').insertAfter('fieldset.credit_card_info-group');
-
-	//cj('#choose-paymentmethod').insertAfter('fieldset.credit_card_info-group');
-	//cj('fieldset#priceset').insertAfter('fieldset.credit_card_info-group');
 	cj('fieldset#priceset legend').css('display', 'none');
 	var selectedIndex=cj( "#payment_method option:selected" ).text();
 	cj('ul#payment_method_li  li').removeClass('current');
@@ -552,8 +546,8 @@
 <style>
 .input_label {
     float: right;
-    margin-top: -3.5%;
-    width: 50%;
+    margin-top: -2.5%;
+    //width: 50%;
 }
 
 .Payment_Amount-section div.label label {
@@ -802,6 +796,7 @@ div#priceset {
     height: 100px;
     margin: 10px 0 !important;
     padding-top: 20px;
+    padding-left: 1.5%;
     width: 40%;
 }
 div#priceset .label {

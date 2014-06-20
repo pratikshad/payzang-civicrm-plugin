@@ -160,6 +160,9 @@ function process_civicrm_buildForm($formName, &$form)
               $element->_options = $options;
             }
         }
+      $currentMonth = date('n');
+      $defaults['credit_card_exp_date']['M'] = $currentMonth;
+      $form->setDefaults( $defaults );
     }
   elseif ( $formName == 'CRM_Contribute_Form_Contribution_Confirm' || $formName == 'CRM_Event_Form_Registration_Confirm' || $formName == 'CRM_Contribute_Form_Contribution_ThankYou' || $formName == 'CRM_Event_Form_Registration_ThankYou')
     {

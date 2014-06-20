@@ -21,38 +21,42 @@
       cj('#choose-paymentmethod').hide();
     });
 
-    cj(document).ajaxStart(function(){
-      if (cj('#payment_information').find('div#priceset').length) {
-	cj('div#priceset').remove();
-        cj('.payment_options-group').append('<div id="priceset">'+priceFields+'</div>');
-      }
-    });
+    cj(document).ajaxComplete(function(event, request, settings) {
+         var obj = event.target.activeElement.attributes['name'];
+         var name;
+     	 cj.each(obj, function(key, element) {
+     	     if(element == 'payment_processor') {
+     	         name = element;
+		 return false;
+     	     }
+         });
 
-    cj(document).ajaxStop(function(){
-      if (cj('.payment_options-group #priceset').length) {
-	cj('div#priceset').remove();
-        cj('.crm-contribution-main-form-block').append('<div id="priceset">'+ priceFields + '</div>');
-      }
-      if (cj('#payment_information #priceset').length) {
-        cj('div#priceset').remove();
-	cj('.crm-contribution-main-form-block').append('<div id="priceset">'+ priceFields + '</div>');
-      }
+	 if (name == "payment_processor") {	 
+      	     if (cj('.payment_options-group #priceset').length) {
+	     	 cj('div#priceset').remove();
+        	 cj('.crm-contribution-main-form-block').append('<div id="priceset">'+ priceFields + '</div>');
+             }
+      	     if (cj('#payment_information #priceset').length) {
+                 cj('div#priceset').remove();
+		 cj('.crm-contribution-main-form-block').append('<div id="priceset">'+ priceFields + '</div>');
+             }
     
-      if (cj('input#payment_type').length) {
-        cj('input#payment_type').next().remove();
-        cj('input#payment_type').remove();
-        if (cj('#choose-paymentmethod').length) {
-	  cj('#choose-paymentmethod').remove();
-        }
-        cj('.crm-contribution-main-form-block').append('<div id="choose-paymentmethod">' +paymentMethods+ '</div>');
-      }
-      if (cj('input#is_recur').parent().length) {
-        cj('input#is_recur').parent().remove();
-        if (cj('.is_recur-section').length) {
-	  cj('.is_recur-section').remove();
-        }
-        cj('.crm-contribution-main-form-block').append('<div class="is_recur-section">' +isRecurSection+ '</div>');
-      }
+	     if (cj('input#payment_type').length) {
+                 cj('input#payment_type').next().remove();
+        	 cj('input#payment_type').remove();
+        	 if (cj('#choose-paymentmethod').length) {
+	  	     cj('#choose-paymentmethod').remove();
+                 }
+        	 cj('.crm-contribution-main-form-block').append('<div id="choose-paymentmethod">' +paymentMethods+ '</div>');
+      	     }
+      	     if (cj('input#is_recur').parent().length) {
+                 cj('input#is_recur').parent().remove();
+        	 if (cj('.is_recur-section').length) {
+	  	     cj('.is_recur-section').remove();
+                 }
+        	 cj('.crm-contribution-main-form-block').append('<div class="is_recur-section">' +isRecurSection+ '</div>');
+             }
+         }
     });
   });
 </script>
@@ -61,9 +65,7 @@
 {literal}
 <style>
 .movingSections {
-    //border-right: 1px solid #000000;
     width: 413px;
 }
-
 </style>
 {/literal}
