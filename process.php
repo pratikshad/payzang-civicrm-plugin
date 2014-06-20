@@ -203,11 +203,9 @@ function process_civicrm_buildForm($formName, &$form)
        * before enabling recurring payments, the "day" option was displaying because processorClass was null.
        */
 
-      //$processorClass = getProcessorClass( $form->getVar('_id') );
       $form->addElement( 'checkbox', 'is_recur', ts('Recurring contributions'), null,
         array('onclick' => "showHideByValue('is_recur',true,'recurFields','table-row','radio',false); showRecurInterval( );") );
       require_once 'CRM/Core/OptionGroup.php';
-      //if( $processorClass == 'com.payzang.payment.pzpayments' ){
       $frequencyUnitOptions = array(
         'weekly'    => 'weekly',
         'bi-weekly' => 'bi-weekly',
@@ -217,10 +215,6 @@ function process_civicrm_buildForm($formName, &$form)
         'semiannually' => 'semiannually',
         'yearly'    => 'yearly'
       );
-      /*}else{
-        $frequencyUnitOptions = CRM_Core_OptionGroup::values( 'recur_frequency_units', false, false, false, null, 'name' );
-        $form->addElement('checkbox', 'is_recur_interval', ts('Support recurring intervals') );
-        }*/
       $form->addCheckBox( 'recur_frequency_unit', ts('Supported recurring units'),
         $frequencyUnitOptions,
         null, null, null, null,
